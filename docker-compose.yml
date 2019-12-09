@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:8.0.15
+    env_file:
+      - env/mysql.env
+    volumes:
+      - mysql_data:/var/lib/mysql
+  golang:
+    build: .
+    env_file:
+      - env/mysql.env
+    ports:
+      - 8080:8080
+    volumes:
+      - ./src:/go/src/github.com/MasatoTokuse/todo
+      - golang_data:/go
+    depends_on:
+      - db
+  nginx:
+    build:
+      context: containers/nginx
+    volumes:
+      - ./containers/nginx/log:/var/log/nginx
+      - ./containers/nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - 8000:80
+    depends_on:
+      - golang
+volumes:
+  mysql_data:
+  golang_data:
