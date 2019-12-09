@@ -12,13 +12,14 @@ import (
 
 // タスク一覧
 func TasksGET(c *gin.Context) {
+    // DBからタスクを全件取得する
     db := model.DBConnect()
     result, err := db.Query("SELECT * FROM task ORDER BY id DESC")
     if err != nil {
         panic(err.Error())
     }
 
-    // json返却用
+    // 返却用jsonの作成
     tasks := []model.Task{}
     for result.Next() {
         task := model.Task{}
@@ -39,13 +40,17 @@ func TasksGET(c *gin.Context) {
     }
     c.JSON(http.StatusOK, gin.H{"tasks": tasks})
 }
+
 // タスク検索
 func FindByID(id uint) model.Task {
+    //DBから指定idのタスクを取得
     db := model.DBConnect()
     result, err := db.Query("SELECT * FROM task WHERE id = ?", id)
     if err != nil {
         panic(err.Error())
     }
+
+    // 取得したレコードのTaskを作成
     task := model.Task{}
     for result.Next() {
         var createdAt, updatedAt time.Time
@@ -63,6 +68,7 @@ func FindByID(id uint) model.Task {
     }
     return task
 }
+
 // タスク登録
 func TaskPOST(c *gin.Context) {
     db := model.DBConnect()
@@ -77,6 +83,7 @@ func TaskPOST(c *gin.Context) {
 
     fmt.Printf("post sent. title: %s", title)
 }
+
 // タスク更新
 func TaskPATCH(c *gin.Context) {
     db := model.DBConnect()
