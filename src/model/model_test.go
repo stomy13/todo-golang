@@ -1,7 +1,7 @@
 package model
 
 import (
-  "testing"
+	"testing"
 )
 
 // 疎通確認
