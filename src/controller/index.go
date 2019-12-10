@@ -102,6 +102,7 @@ func TaskPATCH(c *gin.Context) {
     fmt.Println(task)
     c.JSON(http.StatusOK, gin.H{"task": task})
 }
+
 // タスク削除
 func TaskDELETE(c *gin.Context) {
     db := model.DBConnect()
